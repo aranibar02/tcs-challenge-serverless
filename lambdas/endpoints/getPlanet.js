@@ -22,6 +22,6 @@ exports.handler = async event => {
         return Responses._404({ message: `Failed to get planet by ID: ${ID}` })
     }
 
-    return Responses._200({ data })
+    return Responses._200(data)
 
 };
