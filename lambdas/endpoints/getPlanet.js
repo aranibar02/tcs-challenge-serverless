@@ -8,8 +8,6 @@ const planetResourceUri = (id) => `${baseUrlApi}/planets/${id}`
 exports.handler = async event => {
 
     let ID = event.pathParameters.ID
-    console.log(baseUrlApi)
-    console.log(process.env.IS_OFFLINE)
 
     if (!event.pathParameters || !ID) {
         // failed without an ID
