@@ -35,7 +35,7 @@ describe('get starship integration tests', () => {
         expect(res.statusCode).toBe(204);
     });
 
-    test('it should return a 200 and the player data when a valid ID', async () => {
+    test('it should return a 200 and the starship data when a valid ID', async () => {
         const ID = '328resnrr4sd';
 
         const starship = {

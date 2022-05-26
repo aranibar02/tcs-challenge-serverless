@@ -9,8 +9,15 @@ test('dynamo has get and write', () => {
     expect(typeof Dynamo.write).toBe('function');
 });
 
-const validTableName = 'player-points-table';
-const data = { ID: '3081042', score: 25, name: 'Chris' };
+const validTableName = 'starship-table';
+const data = { 
+        ID: '328resnrr4sd',
+        name: 'Death Star', 
+        model: 'DS-1 Orbital Battle Station', 
+        consumables: '3 years', 
+        passengers: 843342, 
+        crew: 342953
+    };
 
 test('Dynamo write works', async () => {
     expect.assertions(1);
