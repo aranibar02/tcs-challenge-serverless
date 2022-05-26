@@ -1,0 +1,105 @@
+service: tcs-challenge-api
+
+provider:
+    name: aws
+    runtime: nodejs12.x
+    region: eu-west-1
+    environment:
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - dynamodb:*
+              - s3:*
+              - ses:*
+          Resource: '*'
+
+plugins:
+    - serverless-webpack
+    - serverless-offline
+    - serverless-openapi-documentation
+    - serverless-dynamodb-local
+
+package:
+    individually: true
+
+custom:
+    starshipTableName: starship-table
+    vehicleTableName: vehicle-table
+    dynamodb:
+        stages:
+            - dev
+        start:
+            port: 8000
+            inMemory: true
+            migrate: true
+        migration:
+            dir: offline/migrations
+        custom:
+            documentation:
+                version: '1'
+                title: 'My API'
+                description: 'This is my API'
+                models: {}
+functions:
+    getPlanet:
+        handler: lambdas/endpoints/getPlanet.handler
+        events:
+            - http:
+                  path: get-planet/{ID}
+                  method: GET
+                  cors: true
+    createStarship:
+        handler: lambdas/endpoints/starships/createStarship.handler
+        events:
+            - http:
+                  path: create-starship/{ID}
+                  method: POST
+                  cors: true
+    getStarship:
+        handler: lambdas/endpoints/starships/getStarship.handler
+        events:
+            - http:
+                  path: get-starship/{ID}
+                  method: GET
+                  cors: true
+    createVehicle:
+        handler: lambdas/endpoints/vehicles/createVehicle.handler
+        events:
+            - http:
+                  path: create-vehicle/{ID}
+                  method: POST
+                  cors: true
+    getVehicle:
+        handler: lambdas/endpoints/vehicles/getVehicle.handler
+        events:
+            - http:
+                  path: get-vehicle/{ID}
+                  method: GET
+                  cors: true
+    
+resources:
+    Resources:
+        StarshipTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.starshipTableName}
+                AttributeDefinitions:
+                    - AttributeName: ID
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: ID
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST
+        VehicleTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.vehicleTableName}
+                AttributeDefinitions:
+                    - AttributeName: ID
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: ID
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST
+        
+        
